@@ -105,7 +105,7 @@ public class SocketUi {
         mDialogLabel.setText(msg);
         JOptionPane.showMessageDialog(
                 mDialogLabel,
-                "发送消息不能为空",
+                msg,
                 "socket",
                 JOptionPane.INFORMATION_MESSAGE
         );
