@@ -83,7 +83,6 @@ public class ItgConnect {
     }
 
 
-
     public void addItgSendCallback(ItgSendCallback itgSendCallback) {
         mItgSendCallback = itgSendCallback;
     }
@@ -110,6 +109,16 @@ public class ItgConnect {
     public boolean isConnected() {
         boolean connect = mSocket.isConnected() && !mSocket.isClosed();
         return connect;
+    }
+
+    public void shutSocket() {
+        if (!mSocket.isClosed()) {
+            try {
+                mSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String filterError(IOException ioe) {

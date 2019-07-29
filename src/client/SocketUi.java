@@ -94,6 +94,15 @@ public class SocketUi {
             }
         });
 
+        mInterrucpBtn.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (uiSendListener != null) {
+                    uiSendListener.interrup();
+                }
+            }
+        });
+
     }
 
     public void setUiSendListener(UiSendListener uiSendListener) {
@@ -116,6 +125,7 @@ public class SocketUi {
         void sendMessage(String msg);
 
         void connect();
+        void interrup();
     }
 
 

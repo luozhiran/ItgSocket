@@ -66,6 +66,11 @@ public class ClientMain {
                     socketUi.showDialog("socket已经连接");
                 }
             }
+
+            @Override
+            public void interrup() {
+
+            }
         });
     }
 
