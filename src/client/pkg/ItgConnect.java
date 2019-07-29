@@ -30,7 +30,7 @@ public class ItgConnect {
 //            mSocket.setSoTimeout(READ_TIME_OUT);
             mSocket.setKeepAlive(true);
             if (mItgConnectCallback != null) {
-                mItgConnectCallback.onCnnect();
+                mItgConnectCallback.onConnect();
             }
         } catch (IOException e) {
             if (mItgConnectCallback != null) {
@@ -48,10 +48,7 @@ public class ItgConnect {
                 Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
                 writer = new BufferedWriter(writer);
                 writer.write(msg);
-                writer.write("eof");
-                writer.write("\n");
                 writer.flush();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

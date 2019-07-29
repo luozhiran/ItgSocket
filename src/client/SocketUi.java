@@ -9,9 +9,10 @@ public class SocketUi {
     private JFrame jFrame;
 
     private UiSendListener uiSendListener;
-    private JTextArea mSendText;
-    private JTextArea mReceiverText;
-    private JButton mSendBtn, mCancelBtn, mConnectBtn, mInterrucpBtn;
+    public JTextArea mSendText;
+    public JTextArea mReceiverText;
+    public Label mSendState;
+    public JButton mSendBtn, mCancelBtn, mConnectBtn, mInterrucpBtn;
     private JLabel mDialogLabel;
 
     public SocketUi() {
@@ -30,7 +31,6 @@ public class SocketUi {
         mSendText.setLineWrap(true);    //设置多行文本框自动换行
         JScrollPane jspane1 = new JScrollPane(mSendText);    //创建滚动窗格
 
-
         mReceiverText = new JTextArea();
         mReceiverText.setLineWrap(true);
         mReceiverText.setEditable(false);
@@ -43,19 +43,24 @@ public class SocketUi {
 
         //下部组件
         JPanel jp2 = new JPanel();
-
-        mCancelBtn = new JButton("返回");        //创建按钮
-        mSendBtn = new JButton("发送");
+        mSendState = new Label("success");
 
         mConnectBtn = new JButton("连接");
         mInterrucpBtn = new JButton("断开");
+        mInterrucpBtn.setEnabled(false);
+        mCancelBtn = new JButton("返回");        //创建按钮
+
+        mSendBtn = new JButton("发送");
+        mSendBtn.setEnabled(false);
+
+
         //设置布局管理
         jp1.setLayout(new BorderLayout());    //设置面板布局
         jp2.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
         //添加组件
         jp1.add(jsp);
 
+        jp2.add(mSendState);
         jp2.add(mConnectBtn);
         jp2.add(mInterrucpBtn);
         jp2.add(mCancelBtn);
@@ -96,10 +101,6 @@ public class SocketUi {
 
     }
 
-    public void showReceiverText(String msg) {
-        mReceiverText.setText(msg);
-    }
-
     public void showDialog(String msg) {
         mDialogLabel.setText(msg);
         JOptionPane.showMessageDialog(
@@ -109,7 +110,6 @@ public class SocketUi {
                 JOptionPane.INFORMATION_MESSAGE
         );
     }
-
 
 
     public interface UiSendListener {

@@ -1,7 +1,7 @@
 package client.pkg.interfaces;
 
 public interface ItgConnectCallback {
-    void onCnnect();
+    void onConnect();
 
     void onError(String msg);
 }
