@@ -16,6 +16,7 @@ public class ClientMain {
                 socketUi.mConnectBtn.setText("已连接");
                 socketUi.mInterrucpBtn.setEnabled(true);
                 socketUi.mSendBtn.setEnabled(true);
+                itgConnect.receiveMsg();
             }
 
             @Override
@@ -48,6 +49,9 @@ public class ClientMain {
             @Override
             public void onError(String msg) {
                 socketUi.mReceiverText.setText(msg);
+                socketUi.mConnectBtn.setText("连接");
+                socketUi.mInterrucpBtn.setEnabled(false);
+                socketUi.mSendBtn.setEnabled(false);
             }
         });
         socketUi.setUiSendListener(new SocketUi.UiSendListener() {
@@ -69,7 +73,8 @@ public class ClientMain {
 
             @Override
             public void interrup() {
-
+                itgConnect.shutSocket();
+                socketUi.mConnectBtn.setText("连接");
             }
         });
     }

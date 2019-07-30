@@ -36,7 +36,8 @@ public class ItgConnect {
             if (mItgConnectCallback != null) {
                 mItgConnectCallback.onError(filterError(e));
             }
-            System.err.println(e);
+
+            shutSocket();
             e.printStackTrace();
         }
     }
@@ -49,6 +50,7 @@ public class ItgConnect {
                 writer = new BufferedWriter(writer);
                 writer.write(msg);
                 writer.flush();
+                mItgSendCallback.onSended();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -58,27 +60,32 @@ public class ItgConnect {
     }
 
     public void receiveMsg() {
-        if (isConnected()) {
-            try {
-                InputStream in = mSocket.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(in, "utf-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder result = new StringBuilder();
-                System.err.println("阻塞在接受信息------");
-                for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
-                    result.append(line).append("\n");
-                }
-                System.err.println("阻塞在接受信息");
-                if (mItgReceiveCallback != null) {
-                    mItgReceiveCallback.onReceive(result.toString());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                if (mItgReceiveCallback != null) {
-                    mItgReceiveCallback.onError(e.getMessage());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (isConnected()) {
+                    try {
+                        InputStream in = mSocket.getInputStream();
+                        byte[] bytes = new byte[1024];
+                        int len = 0;
+                        StringBuilder s = new StringBuilder();
+                        while ((len = in.read(bytes)) != -1) {
+                            s.append(new String(bytes, 0, len));
+                            if (mItgReceiveCallback != null) {
+                                mItgReceiveCallback.onReceive(s.toString());
+                            }
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        if (mItgReceiveCallback != null) {
+                            mItgReceiveCallback.onError(e.getMessage());
+                        }
+                        shutSocket();
+                    }
                 }
             }
-        }
+        }).start();
 
     }
 
@@ -115,9 +122,14 @@ public class ItgConnect {
         if (!mSocket.isClosed()) {
             try {
                 mSocket.close();
+                mSocket = null;
+                mSocket = new Socket();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            mSocket = null;
+            mSocket = new Socket();
         }
     }
 
